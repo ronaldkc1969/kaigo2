@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>看護師国試 社会保障クイズ（数値問題30問）</title>
+  <title>看護師国試 社会保障クイズ（数値問題30問・単一正解）</title>
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -47,7 +47,7 @@
       border-radius: 4px;
       transition: background-color 0.15s, color 0.15s;
     }
-    .answers input {
+    .answers input[type="radio"] {
       margin-right: 4px;
     }
 
@@ -142,16 +142,14 @@
   </div>
 
   <script>
-    // 数値に関する問題だけを抽出したデータ
-    // multiCorrect: true の問題は「2つ選べ」、checkboxで複数選択
+    // 数値に関する単一正解問題のみ
     const allNumericQuestions = [
       {
         id: 1,
         type: "人口動態",
         text: "2023年における日本の合計特殊出生率で正しいのはどれか。",
         choices: ["1.00", "1.20", "1.50", "1.80"],
-        correctIndex: [1],
-        multiCorrect: false,
+        correctIndex: 1,
         explanation:
 "2023年の合計特殊出生率は1.20で、過去最低を更新した。人口維持に必要な水準（約2.07）を大きく下回っている。"
       },
@@ -160,8 +158,7 @@
         type: "人口動態",
         text: "2023年における日本人女性の平均寿命で正しいのはどれか。",
         choices: ["83.14歳", "85.14歳", "87.14歳", "89.14歳"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "2023年の日本人女性の平均寿命は87.14歳である。男性は81.09歳であり、世界的にも高い水準にある。"
       },
@@ -170,8 +167,7 @@
         type: "人口動態",
         text: "2023年における出生数で最も近いのはどれか。",
         choices: ["約52万人", "約62万人", "約73万人", "約83万人"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "2023年の出生数は約72万7千人で、統計開始以来最少となった。"
       },
@@ -180,8 +176,7 @@
         type: "人口動態",
         text: "2024年における日本の高齢化率（65歳以上人口の割合）で正しいのはどれか。",
         choices: ["23.3％", "26.3％", "29.3％", "32.3％"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "2024年の高齢化率は29.3％であり、65歳以上人口は約3,625万人である。"
       },
@@ -190,8 +185,7 @@
         type: "人口動態",
         text: "2024年における75歳以上人口の総人口に占める割合で正しいのはどれか。",
         choices: ["10.8％", "13.8％", "16.8％", "19.8％"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "2024年の75歳以上人口は約2,076万人で、総人口の16.8％を占める。"
       },
@@ -200,8 +194,7 @@
         type: "医療費",
         text: "令和5年度（2023年度）の国民医療費で正しいのはどれか。",
         choices: ["約38兆円", "約43兆円", "約48兆915億円", "約53兆円"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の国民医療費は48兆915億円で、3年連続で過去最高を更新した。"
       },
@@ -210,8 +203,7 @@
         type: "医療費",
         text: "令和5年度（2023年度）における人口1人当たりの国民医療費で最も近いのはどれか。",
         choices: ["28万6,700円", "33万6,700円", "38万6,700円", "43万6,700円"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の1人当たり国民医療費は38万6,700円であり、前年から3.5％増加している。"
       },
@@ -220,8 +212,7 @@
         type: "医療費",
         text: "令和5年度（2023年度）における後期高齢者医療費の総額で最も近いのはどれか。",
         choices: ["9兆円", "14兆円", "19兆円", "24兆円"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の後期高齢者医療費は19兆1,503億円で、国民医療費全体の約39.8％を占める。"
       },
@@ -230,8 +221,7 @@
         type: "医療費",
         text: "75歳以上の後期高齢者における1人当たり医療費（令和5年度）で正しいのはどれか。",
         choices: ["56万5,000円", "76万5,000円", "96万5,000円", "116万5,000円"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の75歳以上の1人当たり医療費は96万5,000円で、75歳未満の約3.8倍となっている。"
       },
@@ -240,8 +230,7 @@
         type: "医療費",
         text: "令和5年度（2023年度）の国民医療費の財源構成について、最も大きな割合を占める財源はどれか。",
         choices: ["患者負担", "保険料", "公費", "その他"],
-        correctIndex: [1],
-        multiCorrect: false,
+        correctIndex: 1,
         explanation:
 "令和5年度の国民医療費の財源構成で最も大きいのは保険料で、約50％を占める。"
       },
@@ -250,8 +239,7 @@
         type: "介護保険",
         text: "令和5年度（2023年度）における要介護・要支援認定者数で最も近いのはどれか。",
         choices: ["508万人", "608万人", "708万人", "808万人"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度末の要介護・要支援認定者数は708万人で、初めて700万人を超えた。"
       },
@@ -260,8 +248,7 @@
         type: "介護保険",
         text: "令和5年度（2023年度）における65歳以上高齢者の要介護認定率で正しいのはどれか。",
         choices: ["13.4％", "16.4％", "19.4％", "22.4％"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の65歳以上高齢者に占める要介護・要支援認定者の割合は19.4％である。"
       },
@@ -270,8 +257,7 @@
         type: "介護保険",
         text: "令和5年度（2023年度）の介護保険給付費で最も近いのはどれか。",
         choices: ["5兆8,263億円", "8兆8,263億円", "10兆8,263億円", "12兆8,263億円"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の介護保険給付費は10兆8,263億円で、過去最高を更新している。"
       },
@@ -280,8 +266,7 @@
         type: "生活保護",
         text: "令和5年度（2023年度）における生活保護の被保護実世帯数で最も近いのはどれか。",
         choices: ["125万世帯", "145万世帯", "165万世帯", "185万世帯"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の生活保護被保護実世帯数は165万478世帯である。"
       },
@@ -290,8 +275,7 @@
         type: "生活保護",
         text: "令和5年度（2023年度）における生活保護の被保護実人員で最も近いのはどれか。",
         choices: ["172万人", "202万人", "232万人", "262万人"],
-        correctIndex: [1],
-        multiCorrect: false,
+        correctIndex: 1,
         explanation:
 "令和5年度の生活保護被保護実人員は202万4,586人である。"
       },
@@ -300,8 +284,7 @@
         type: "生活保護",
         text: "令和5年度（2023年度）における生活保護の保護率（人口100人対）で正しいのはどれか。",
         choices: ["0.62％", "1.62％", "2.62％", "3.62％"],
-        correctIndex: [1],
-        multiCorrect: false,
+        correctIndex: 1,
         explanation:
 "令和5年度の保護率は1.62％であり、約62人に1人が生活保護を受給している。"
       },
@@ -310,8 +293,7 @@
         type: "障害者福祉",
         text: "令和5年度（2023年度）における身体障害者手帳交付台帳登載数で最も近いのはどれか。",
         choices: ["378万人", "428万人", "478万人", "528万人"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度末の身体障害者手帳交付台帳登載数は約478万3千人である。"
       },
@@ -320,8 +302,7 @@
         type: "障害者福祉",
         text: "令和5年度（2023年度）における療育手帳交付台帳登載数で最も近いのはどれか。",
         choices: ["88万人", "108万人", "128万人", "148万人"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度末の療育手帳交付台帳登載数は約128万1千人である。"
       },
@@ -330,8 +311,7 @@
         type: "労働・賃金",
         text: "2023年度（令和5年度）の地域別最低賃金の全国加重平均で正しいのはどれか。",
         choices: ["861円", "931円", "1,004円", "1,074円"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "2023年度の最低賃金は全国加重平均で1,004円となり、初めて1,000円を超えた。"
       },
@@ -340,28 +320,12 @@
         type: "労働・賃金",
         text: "2023年4月から中小企業にも適用された月60時間超の時間外労働の割増賃金率で正しいのはどれか。",
         choices: ["25％", "35％", "50％", "75％"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "2023年4月から中小企業でも、月60時間を超える時間外労働の割増賃金率が50％となった。"
       },
       {
         id: 21,
-        type: "医療費（構成）",
-        text: "令和5年度（2023年度）の国民医療費の財源構成において、保険料と公費について正しいものを2つ選べ。（2つ選べ）",
-        choices: [
-          "保険料は国民医療費の約50％を占める",
-          "公費は国民医療費の約10％を占める",
-          "公費は国民医療費の約38％を占める",
-          "保険料は国民医療費の約20％を占める"
-        ],
-        correctIndex: [0, 2],
-        multiCorrect: true,
-        explanation:
-"令和5年度の国民医療費の財源構成は、保険料が約50％、公費が約38％、患者負担が約12％となっている。"
-      },
-      {
-        id: 22,
         type: "高齢化",
         text: "2024年における65歳以上人口（約3,625万人）と75歳以上人口（約2,076万人）について正しい組み合わせはどれか。",
         choices: [
@@ -370,13 +334,12 @@
           "65歳以上：約4,025万人／75歳以上：約2,276万人",
           "65歳以上：約3,825万人／75歳以上：約1,976万人"
         ],
-        correctIndex: [1],
-        multiCorrect: false,
+        correctIndex: 1,
         explanation:
 "2024年の65歳以上人口は約3,625万人、75歳以上人口は約2,076万人である。"
       },
       {
-        id: 23,
+        id: 22,
         type: "医療費（年齢差）",
         text: "令和5年度（2023年度）の75歳以上と75歳未満の1人当たり医療費について正しい組み合わせはどれか。",
         choices: [
@@ -385,13 +348,12 @@
           "75歳以上：56万5,000円／75歳未満：15万2,000円",
           "75歳以上：116万5,000円／75歳未満：45万2,000円"
         ],
-        correctIndex: [0],
-        multiCorrect: false,
+        correctIndex: 0,
         explanation:
 "令和5年度の75歳以上の1人当たり医療費は96万5,000円、75歳未満は25万2,000円である。"
       },
       {
-        id: 24,
+        id: 23,
         type: "介護保険（率）",
         text: "令和5年度（2023年度）の介護保険における65歳以上の要介護・要支援認定率19.4％について正しい説明はどれか。",
         choices: [
@@ -400,84 +362,76 @@
           "約3人に1人が認定されている",
           "約2人に1人が認定されている"
         ],
-        correctIndex: [1],
-        multiCorrect: false,
+        correctIndex: 1,
         explanation:
 "要介護・要支援認定率19.4％は、65歳以上高齢者の約5人に1人が認定を受けていることを意味する。"
       },
       {
-        id: 25,
-        type: "生活保護（率）",
-        text: "令和5年度（2023年度）の生活保護の保護率1.62％について正しい説明はどれか。",
-        choices: [
-          "人口100人のうち約1.6人が生活保護を受けている",
-          "人口10人のうち約1.6人が生活保護を受けている",
-          "人口1,000人のうち約16人が生活保護を受けている",
-          "人口1万人のうち約162人が生活保護を受けている"
-        ],
-        correctIndex: [0, 2], // 1.62% = 1.62/100 ≒ 16.2/1000
-        multiCorrect: true,
-        explanation:
-"保護率1.62％は、人口100人のうち約1.6人、すなわち人口1,000人のうち約16人が生活保護を受けていることを意味する。"
-      },
-      {
-        id: 26,
+        id: 24,
         type: "最低賃金",
-        text: "2023年度（令和5年度）の最低賃金全国加重平均額1,004円について正しいのはどれか。",
-        choices: [
-          "2022年度からの引き上げ額は13円である",
-          "2022年度からの引き上げ額は23円である",
-          "2022年度からの引き上げ額は33円である",
-          "2022年度からの引き上げ額は43円である"
-        ],
-        correctIndex: [3],
-        multiCorrect: false,
+        text: "2023年度（令和5年度）の最低賃金全国加重平均額1,004円について、2022年度からの引き上げ額で正しいのはどれか。",
+        choices: ["13円", "23円", "33円", "43円"],
+        correctIndex: 3,
         explanation:
 "2023年度の最低賃金全国加重平均は1,004円で、2022年度から43円引き上げられた。"
       },
       {
-        id: 27,
+        id: 25,
         type: "医療費（対GDP比）",
         text: "令和5年度（2023年度）の国民医療費の対GDP比で最も近いのはどれか。",
         choices: ["4.08％", "6.08％", "8.08％", "10.08％"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "令和5年度の国民医療費の対GDP比は約8.08％である。"
       },
       {
-        id: 28,
+        id: 26,
         type: "障害者福祉（構成）",
         text: "身体障害者手帳交付者のうち、肢体不自由と内部障害の2つで全体のおよそ何割を占めるか。",
         choices: ["約3割", "約5割", "約8割", "約9割"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "肢体不自由が約48.8％、内部障害が約34.0％であり、両者でおよそ8割を占める。"
       },
       {
-        id: 29,
+        id: 27,
         type: "高齢化と医療費",
         text: "令和5年度（2023年度）の国民医療費に占める65歳以上の医療費の割合として最も近いのはどれか。",
         choices: ["約30％", "約40％", "約50％", "約60％"],
-        correctIndex: [3],
-        multiCorrect: false,
+        correctIndex: 3,
         explanation:
 "国民医療費に占める65歳以上の医療費は約60％とされている。"
       },
       {
-        id: 30,
-        type: "介護と医療の負担",
+        id: 28,
+        type: "社会保障給付費",
         text: "日本の社会保障給付費全体のうち、医療と介護が占める割合として最も近いのはどれか。",
         choices: ["約2割", "約3割", "約4割", "約5割"],
-        correctIndex: [2],
-        multiCorrect: false,
+        correctIndex: 2,
         explanation:
 "社会保障給付費全体のうち、医療と介護が占める割合はおおむね4割前後とされる。"
+      },
+      {
+        id: 29,
+        type: "生活保護（率のイメージ）",
+        text: "生活保護の保護率1.62％は、人口1,000人当たり何人程度が生活保護を受給していることを意味するか。",
+        choices: ["約6人", "約12人", "約16人", "約26人"],
+        correctIndex: 2,
+        explanation:
+"1.62％は人口1,000人当たり約16人が生活保護を受給していることを意味する。"
+      },
+      {
+        id: 30,
+        type: "介護保険（財政規模）",
+        text: "令和5年度（2023年度）の介護保険給付費10兆8,263億円は、およそ何兆円と捉えるのが適切か。",
+        choices: ["約5兆円", "約8兆円", "約11兆円", "約15兆円"],
+        correctIndex: 2,
+        explanation:
+"10兆8,263億円は概ね約11兆円と捉えることができる。"
       }
     ];
 
-    // --- シャッフル（Fisher–Yates） ---
+    // シャッフル
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -486,32 +440,27 @@
       return array;
     }
 
-    // 状態管理
-    let quizQuestions = [];       // 今回出題する30問
-    let wrongQuestions = [];      // 1周目で間違った問題
+    let quizQuestions = [];
+    let wrongQuestions = [];
     let currentIndex = 0;
-    let round = 1;                // 1周目 or 2周目
-    let answeredCurrent = false;  // この問題で採点済かどうか
+    let round = 1;
+    let answeredCurrent = false;
 
-    const qNumberEl      = document.getElementById("q-number");
-    const qMetaEl        = document.getElementById("q-meta");
-    const questionEl     = document.getElementById("question");
-    const answersEl      = document.getElementById("answers");
-    const explanationEl  = document.getElementById("explanation");
-    const showAnswerBtn  = document.getElementById("show-answer");
-    const nextBtn        = document.getElementById("next");
-    const restartBtn     = document.getElementById("restart");
-    const resultEl       = document.getElementById("result");
-    const roundInfoEl    = document.getElementById("round-info");
+    const qNumberEl     = document.getElementById("q-number");
+    const qMetaEl       = document.getElementById("q-meta");
+    const questionEl    = document.getElementById("question");
+    const answersEl     = document.getElementById("answers");
+    const explanationEl = document.getElementById("explanation");
+    const showAnswerBtn = document.getElementById("show-answer");
+    const nextBtn       = document.getElementById("next");
+    const restartBtn    = document.getElementById("restart");
+    const resultEl      = document.getElementById("result");
+    const roundInfoEl   = document.getElementById("round-info");
 
     function pick30RandomQuestions() {
       const cloned = [...allNumericQuestions];
       shuffle(cloned);
       return cloned.slice(0, 30);
-    }
-
-    function isCheckboxQuestion(q) {
-      return q.multiCorrect === true && Array.isArray(q.correctIndex) && q.correctIndex.length > 1;
     }
 
     function renderQuestion(index) {
@@ -522,14 +471,11 @@
 
       qNumberEl.textContent = `Q${index + 1} / ${quizQuestions.length}`;
       qMetaEl.textContent   = q.type || "";
-      questionEl.textContent = q.text + (isCheckboxQuestion(q) ? "（2つ選べ）" : "");
+      questionEl.textContent = q.text;
       answersEl.innerHTML    = "";
       explanationEl.style.display = "none";
       explanationEl.textContent = "";
       resultEl.textContent   = "";
-
-      const inputType = isCheckboxQuestion(q) ? "checkbox" : "radio";
-      const nameAttr  = "answer";
 
       q.choices.forEach((choice, i) => {
         const label = document.createElement("label");
@@ -537,8 +483,8 @@
         const badge = document.createElement("span");
         const text  = document.createElement("span");
 
-        input.type = inputType;
-        input.name = nameAttr;
+        input.type = "radio";
+        input.name = "answer";
         input.value = i;
 
         badge.className = "answer-badge";
@@ -549,7 +495,6 @@
         label.appendChild(input);
         label.appendChild(badge);
         label.appendChild(text);
-
         answersEl.appendChild(label);
       });
 
@@ -559,49 +504,25 @@
           : "【2周目】1周目で間違えた問題のみ再出題中";
     }
 
-    function getSelectedIndices(q) {
-      const inputs = answersEl.querySelectorAll("input");
-      const indices = [];
-      inputs.forEach((input, i) => {
-        if (input.checked) {
-          indices.push(i);
-        }
-      });
-      return indices;
-    }
-
-    function arraysEqualAsSet(a, b) {
-      if (a.length !== b.length) return false;
-      const setA = new Set(a);
-      const setB = new Set(b);
-      if (setA.size !== setB.size) return false;
-      for (const v of setA) {
-        if (!setB.has(v)) return false;
+    function getSelectedIndex() {
+      const inputs = answersEl.querySelectorAll("input[type=radio]");
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) return i;
       }
-      return true;
+      return null;
     }
 
     function gradeCurrentQuestion() {
       const q = quizQuestions[currentIndex];
-      const selectedIndices = getSelectedIndices(q);
+      const selected = getSelectedIndex();
 
-      // 未選択チェック
-      if (selectedIndices.length === 0) {
-        alert(isCheckboxQuestion(q) ? "答えを2つ選択してください。" : "答えを1つ選択してください。");
-        return false;
-      }
-      if (isCheckboxQuestion(q) && selectedIndices.length !== q.correctIndex.length) {
-        alert(`この問題は${q.correctIndex.length}つ選択してください。`);
-        return false;
-      }
-      if (!isCheckboxQuestion(q) && selectedIndices.length > 1) {
-        alert("1つだけ選択してください。");
+      if (selected === null) {
+        alert("答えを1つ選択してください。");
         return false;
       }
 
-      // 採点
       const labels = answersEl.querySelectorAll("label");
-      const isCorrect = arraysEqualAsSet(selectedIndices, q.correctIndex);
+      const isCorrect = selected === q.correctIndex;
 
       labels.forEach((label, i) => {
         label.classList.remove("correct-answer", "wrong-answer");
@@ -609,13 +530,12 @@
         badge.textContent = "";
         badge.classList.remove("badge-correct", "badge-wrong");
 
-        if (q.correctIndex.includes(i)) {
+        if (i === q.correctIndex) {
           label.classList.add("correct-answer");
           badge.textContent = "✔ 正解";
           badge.classList.add("badge-correct");
         }
-
-        if (selectedIndices.includes(i) && !q.correctIndex.includes(i)) {
+        if (i === selected && i !== q.correctIndex) {
           label.classList.add("wrong-answer");
           badge.textContent = "✖";
           badge.classList.add("badge-wrong");
@@ -624,10 +544,9 @@
 
       resultEl.textContent = isCorrect ? "正解です。" : "不正解です。";
       explanationEl.style.display = "block";
-      const correctTexts = q.correctIndex.map(i => q.choices[i]).join("、");
-      explanationEl.textContent = `【正解】${correctTexts}\n\n【解説】\n${q.explanation}`;
+      const correctText = q.choices[q.correctIndex];
+      explanationEl.textContent = `【正解】${correctText}\n\n【解説】\n${q.explanation}`;
 
-      // 1周目で間違えたら記録
       if (round === 1 && !isCorrect) {
         wrongQuestions.push(q);
       }
@@ -641,7 +560,6 @@
     });
 
     nextBtn.addEventListener("click", () => {
-      // 採点していない場合は警告
       if (!answeredCurrent) {
         const ok = gradeCurrentQuestion();
         if (!ok) return;
@@ -649,13 +567,11 @@
 
       currentIndex++;
       if (currentIndex >= quizQuestions.length) {
-        // ラウンド終了
         if (round === 1) {
           if (wrongQuestions.length === 0) {
             resultEl.textContent = "1周目が終了しました。全問正解です。お疲れさまでした。";
             return;
           } else {
-            // 2周目開始：間違った問題だけ再出題
             quizQuestions = [...wrongQuestions];
             wrongQuestions = [];
             shuffle(quizQuestions);
@@ -679,7 +595,7 @@
     });
 
     function startNewQuiz() {
-      quizQuestions = pick30RandomQuestions();
+      quizQuestions  = pick30RandomQuestions();
       wrongQuestions = [];
       shuffle(quizQuestions);
       currentIndex = 0;
@@ -687,7 +603,6 @@
       renderQuestion(currentIndex);
     }
 
-    // 初期開始
     startNewQuiz();
   </script>
 </body>
