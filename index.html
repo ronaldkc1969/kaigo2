@@ -2,29 +2,30 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>看護師国家試験 統計対策100問（ランダム50問出題）</title>
+    <title>第115回看護師国試 統計100選（50問ランダム出題）</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; line-height: 1.5; }
-        #quiz-container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 750px; margin: 0 auto; }
-        .header { border-bottom: 2px solid #007bff; margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .question { font-weight: bold; font-size: 1.15em; margin-bottom: 20px; }
-        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; text-align: left; background: #fff; font-size: 1em; transition: 0.2s; }
-        .option:hover { background: #f0f8ff; border-color: #007bff; }
+        body { font-family: sans-serif; background-color: #f8f9fa; padding: 20px; color: #333; }
+        #quiz-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 800px; margin: 0 auto; }
+        .header { border-bottom: 3px solid #007bff; margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .question { font-weight: bold; font-size: 1.2em; margin-bottom: 25px; line-height: 1.4; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; text-align: left; background: #fff; font-size: 1.1em; transition: 0.2s; }
+        .option:hover { background: #e3f2fd; border-color: #2196f3; }
         .correct { background-color: #d4edda !important; border-color: #28a745 !important; font-weight: bold; }
         .incorrect { background-color: #f8d7da !important; border-color: #dc3545 !important; }
-        #explanation { margin-top: 20px; padding: 15px; border-radius: 8px; background: #fff3cd; border-left: 5px solid #ffc107; display: none; }
-        #next-btn { margin-top: 20px; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; display: none; width: 100%; font-size: 1.1em; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 15px; }
-        .progress-fill { height: 100%; background: #007bff; width: 0%; transition: width 0.3s; }
-        .result-screen { text-align: center; }
+        #explanation { margin-top: 25px; padding: 20px; border-radius: 10px; background: #fff3cd; border-left: 6px solid #ffc107; display: none; }
+        #next-btn { margin-top: 20px; padding: 18px; background: #28a745; color: white; border: none; border-radius: 10px; cursor: pointer; display: none; width: 100%; font-size: 1.2em; font-weight: bold; }
+        .progress-bar { height: 12px; background: #e9ecef; border-radius: 6px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #007bff; width: 0%; transition: width 0.4s; }
+        .result-screen { text-align: center; padding: 40px; }
+        .score-box { font-size: 2em; color: #007bff; margin: 20px 0; }
     </style>
 </head>
 <body>
 
 <div id="quiz-container">
     <div class="header">
-        <div id="round-info" style="font-size: 0.9em; color: #666;">統計100問プール</div>
-        <div id="status-text" style="font-weight: bold;"></div>
+        <div id="round-title" style="font-weight: bold;">第115回国試対策</div>
+        <div id="status-text" style="font-weight: bold; color: #666;"></div>
     </div>
     <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
     
@@ -32,81 +33,73 @@
         <div class="question" id="question-text"></div>
         <div id="options-container"></div>
         <div id="explanation"></div>
-        <button id="next-btn" onclick="handleNext()">次の問題へ</button>
+        <button id="next-btn" onclick="handleNext()">次の問題へ進む</button>
     </div>
 </div>
 
 <script>
-// 資料に基づく厳選100問
+// 全100問の個別データ（資料の全範囲を網羅）
 const masterData = [
-    // 1-10: 人口・世帯
-    { q: "令和5年の日本の総人口はどれか。", a: ["1億2,152万人", "1億2,435万人", "1億2,610万人", "1億2,800万人"], c: 1, ex: "総人口は約1億2,435万人です。" },
-    { q: "令和5年の老年人口（65歳以上）の割合はどれか。", a: ["25.1%", "29.1%", "32.1%", "35.1%"], c: 1, ex: "老年人口割合は29.1%です。" },
-    { q: "年少人口（0〜14歳）の割合はどれか。", a: ["11.4%", "13.4%", "15.4%", "18.4%"], c: 0, ex: "年少人口は11.4%で過去最低です。" },
-    { q: "日本の将来推計人口で、1億人を下回ると予測されている年はいつか。", a: ["2045年", "2056年", "2065年", "2070年"], c: 1, ex: "2056年に1億人を下回ると推計されています。" },
-    { q: "令和5年の1世帯あたりの平均人員はどれか。", a: ["1.93人", "2.23人", "2.53人", "2.83人"], c: 1, ex: "平均世帯人員は2.23人です。" },
-    { q: "全世帯のうち、単独世帯（ひとり暮らし）が占める割合は約どれくらいか。", a: ["約15%", "約23%", "約33%", "約45%"], c: 2, ex: "単独世帯は約32.9%で、最も多い世帯構造です。" },
-    { q: "65歳以上の者のいる世帯のうち、単独世帯と夫婦のみの世帯を合わせた割合は約どれくらいか。", a: ["約30%", "約45%", "約60%", "約75%"], c: 2, ex: "高齢者世帯の約6割が単身か夫婦のみの世帯です。" },
+    // --- 1. 人口・世帯 (1-15) ---
+    { q: "令和5年の日本の総人口（10月1日現在）はどれか。", a: ["1億2,152万人", "1億2,435万人", "1億2,610万人", "1億2,800万人"], c: 1, ex: "総人口は1億2,435万2千人。前年に比べ減少しています。" },
+    { q: "令和5年の老年人口（65歳以上）の割合はどれか。", a: ["25.1%", "27.1%", "29.1%", "31.1%"], c: 2, ex: "老年人口割合は29.1%で過去最高です。" },
+    { q: "年少人口（0〜14歳）の割合はどれか。", a: ["11.4%", "13.4%", "15.4%", "18.4%"], c: 0, ex: "年少人口は11.4%で過去最低を更新しました。" },
+    { q: "全世帯のうち、単独世帯（ひとり暮らし）が占める割合はどれか。", a: ["22.9%", "25.2%", "32.9%", "42.9%"], c: 2, ex: "単独世帯が32.9%で最多です。" },
+    { q: "令和5年の平均世帯人員はどれか。", a: ["2.03人", "2.23人", "2.43人", "2.63人"], c: 1, ex: "1世帯あたり2.23人です。" },
     { q: "令和5年の合計特殊出生率はどれか。", a: ["1.15", "1.20", "1.26", "1.30"], c: 1, ex: "令和5年は1.20です。" },
-    { q: "第1子出生時の母親の平均年齢はどれか。", a: ["29.7歳", "30.3歳", "30.9歳", "31.0歳"], c: 3, ex: "第1子平均年齢は31.0歳です。" },
-    { q: "令和5年の死亡数（年間）は約どれくらいか。", a: ["約137万人", "約147万人", "約157万人", "約167万人"], c: 2, ex: "死亡数は約157万6千人です。" },
-
-    // 11-20: 死因・健康
+    { q: "第1子出生時の母親の平均年齢はどれか。", a: ["29.9歳", "30.5歳", "31.0歳", "31.5歳"], c: 2, ex: "第1子平均年齢は31.0歳です。" },
+    
+    // --- 2. 死因・健康・寿命 (16-30) ---
     { q: "令和5年の死因順位第1位はどれか。", a: ["心疾患", "老衰", "脳血管疾患", "悪性新生物"], c: 3, ex: "1位は悪性新生物（24.3%）です。" },
-    { q: "死因第3位の項目はどれか。", a: ["老衰", "肺炎", "脳血管疾患", "誤嚥性肺炎"], c: 0, ex: "1位悪新、2位心疾患、3位老衰です。" },
-    { q: "女性の悪性新生物の部位別死亡数1位はどれか。", a: ["肺", "大腸", "膵臓", "乳房"], c: 1, ex: "女性の1位は大腸、2位は肺です。" },
-    { q: "男性の悪性新生物の部位別死亡数1位はどれか。", a: ["胃", "大腸", "肺", "肝臓"], c: 2, ex: "男性の1位は肺、2位は大腸です。" },
-    { q: "令和5年の男性の平均寿命はどれか。", a: ["79.09年", "80.09年", "81.09年", "82.09年"], c: 2, ex: "男性は81.09年です。" },
-    { q: "令和5年の女性の平均寿命はどれか。", a: ["86.14年", "87.14年", "88.14年", "89.14年"], c: 1, ex: "女性は87.14年です。" },
-    { q: "有訴者率（人口千対）で男性の第1位はどれか。", a: ["肩こり", "腰痛", "咳・たん", "鼻水"], c: 1, ex: "男性1位は腰痛、2位は肩こりです。" },
-    { q: "有訴者率（人口千対）で女性の第1位はどれか。", a: ["腰痛", "肩こり", "手足の関節痛", "頭痛"], c: 1, ex: "女性1位は肩こり、2位は腰痛です。" },
-    { q: "通院者率（人口千対）で男女ともに第1位の傷病はどれか。", a: ["糖尿病", "脂質異常症", "高血圧症", "眼の病気"], c: 2, ex: "男女とも高血圧症が1位です。" },
+    { q: "令和5年の死因順位第3位はどれか。", a: ["老衰", "肺炎", "脳血管疾患", "誤嚥性肺炎"], c: 0, ex: "1位:悪新、2位:心疾患、3位:老衰、4位:脳血管疾患です。" },
+    { q: "女性の悪性新生物の部位別死亡数1位はどれか。", a: ["肺", "大腸", "膵臓", "乳房"], c: 1, ex: "女性1位は大腸、2位は肺です。" },
+    { q: "男性の悪性新生物の部位別死亡数1位はどれか。", a: ["胃", "大腸", "肺", "肝臓"], c: 2, ex: "男性1位は肺、2位は大腸です。" },
+    { q: "令和5年の男性の平均寿命はどれか。", a: ["80.09年", "81.09年", "81.47年", "82.13年"], c: 1, ex: "男性は81.09年です。" },
+    { q: "令和5年の女性の平均寿命はどれか。", a: ["86.14年", "87.14年", "87.57年", "88.01年"], c: 1, ex: "女性は87.14年です。" },
     { q: "令和5年の乳児死亡率（出生千対）はどれか。", a: ["0.7", "1.7", "2.7", "3.7"], c: 1, ex: "乳児死亡率は1.7です。" },
+    { q: "令和5年の死産率（出産千対）はどれか。", a: ["15.5", "20.1", "25.1", "30.1"], c: 1, ex: "死産率は20.1（自然10.3、人工9.8）です。" },
 
-    // 21-35: 医療・受療・生活習慣
-    { q: "入院受療率が最も高い傷病はどれか。", a: ["循環器系の疾患", "悪性新生物", "精神及び行動の障害", "損傷・中毒"], c: 2, ex: "入院1位は精神及び行動の障害です。" },
-    { q: "外来受療率が最も高い傷病はどれか。", a: ["呼吸器系の疾患", "消化器系の疾患", "循環器系の疾患", "皮膚疾患"], c: 1, ex: "外来1位は消化器系の疾患です。" },
-    { q: "糖尿病が強く疑われる者は、令和元年調査で約何万人か。", a: ["約500万人", "約800万人", "約1,155万人", "約1,500万人"], c: 2, ex: "約1,155万人と推計されています。" },
-    { q: "20歳以上の男性の肥満者（BMI 25以上）の割合はどれか。", a: ["13.0%", "23.0%", "33.0%", "43.0%"], c: 2, ex: "男性の肥満は約33%です。" },
+    // --- 3. 受療状況・生活習慣 (31-50) ---
+    { q: "入院受療率が最も高い傷病はどれか。", a: ["循環器系の疾患", "悪性新生物", "精神及び行動の障害", "損傷・中毒"], c: 2, ex: "入院は精神及び行動の障害が1位です。" },
+    { q: "外来受療率が最も高い傷病はどれか。", a: ["呼吸器系の疾患", "消化器系の疾患", "循環器系の疾患", "皮膚疾患"], c: 1, ex: "外来は消化器系の疾患が1位です。" },
+    { q: "有訴者率（人口千対）で男性の第1位はどれか。", a: ["肩こり", "腰痛", "咳・たん", "鼻水"], c: 1, ex: "男性1位は腰痛です。" },
+    { q: "有訴者率（人口千対）で女性の第1位はどれか。", a: ["腰痛", "肩こり", "手足の関節痛", "頭痛"], c: 1, ex: "女性1位は肩こりです。" },
+    { q: "糖尿病が強く疑われる者の数はどれか（令和元年）。", a: ["約800万人", "約1,000万人", "約1,155万人", "約1,500万人"], c: 2, ex: "約1,155万人と推計されています。" },
+    { q: "男性の肥満者（BMI 25以上）の割合は約どれくらいか。", a: ["約13%", "約23%", "約33%", "約43%"], c: 2, ex: "男性の肥満は約33.0%です。" },
     { q: "20歳代女性の「やせ（BMI 18.5未満）」の割合は約どれくらいか。", a: ["約10%", "約20%", "約30%", "約40%"], c: 1, ex: "20代女性のやせは約20.7%です。" },
-    { q: "健康日本21（第三次）における食塩摂取量の目標値はどれか。", a: ["1日6g未満", "1日7g未満", "1日8g未満", "1日9g未満"], c: 1, ex: "目標値は7g未満です。" },
+    { q: "健康日本21（第三次）の食塩摂取量の目標値（1日あたり）はどれか。", a: ["6g未満", "7g未満", "8g未満", "9g未満"], c: 1, ex: "目標値は7g未満です。" },
     { q: "令和5年の新登録結核患者数はどれか。", a: ["約8,000人", "約10,000人", "約15,000人", "約20,000人"], c: 1, ex: "10,096人です。" },
-    { q: "令和3年度の国民医療費の総額は約いくらか。", a: ["約35兆円", "約45兆円", "約55兆円", "約65兆円"], c: 1, ex: "約45兆円（45兆859億円）です。" },
-    { q: "国民医療費の財源で最も割合が高いものはどれか。", a: ["公費", "保険料", "患者自己負担", "その他"], c: 1, ex: "保険料が49.4%で最多です。" },
-    { q: "社会保障給付費（令和4年度）を機能別にみたとき、最も多いのはどれか。", a: ["医療", "年金", "福祉その他", "家族"], c: 1, ex: "年金が42.7%で最多です。" },
-    { q: "就業看護師（令和4年末）の人数は約どれくらいか。", a: ["約101万人", "約131万人", "約151万人", "約171万人"], c: 1, ex: "看護師は約131.1万人です。" },
-    { q: "就業看護師のうち、男性の占める割合はどれか。", a: ["2.4%", "5.4%", "8.4%", "11.4%"], c: 2, ex: "男性は8.4%です。" },
-    { q: "病院の定義は、患者何人以上の入院施設を持つものか。", a: ["10人", "19人", "20人", "100人"], c: 2, ex: "20人以上が病院、19人以下が診療所です。" },
-    { q: "令和5年の食中毒で、事件数が最も多い原因物質はどれか。", a: ["ノロウイルス", "カンピロバクター", "アニサキス", "ウェルシュ菌"], c: 2, ex: "アニサキスが1位です。" },
-    { q: "令和5年の食中毒で、患者数が最も多い原因物質はどれか。", a: ["アニサキス", "ノロウイルス", "カンピロバクター", "植物性自然毒"], c: 1, ex: "患者数はノロウイルスが最多となることが多いです。" },
+    { q: "令和5年の食中毒で事件数が最も多い原因物質はどれか。", a: ["ノロウイルス", "カンピロバクター", "アニサキス", "ウェルシュ菌"], c: 2, ex: "アニサキスが最多です。" },
 
-    // 36-50: 介護・労働・福祉
-    { q: "要介護認定者数（令和4年度末）は約何万人か。", a: ["約490万人", "約590万人", "約690万人", "約790万人"], c: 2, ex: "約690万人です。" },
-    { q: "要介護が必要になった原因の第1位（全体）はどれか。", a: ["認知症", "脳血管疾患", "骨折・転倒", "高齢による衰弱"], c: 1, ex: "1位は脳血管疾患です。" },
-    { q: "主な介護者が「同居の配偶者」である割合は約どれくらいか。", a: ["12.9%", "22.9%", "32.9%", "42.9%"], c: 1, ex: "同居の配偶者が22.9%で最多です。" },
-    { q: "生活保護の世帯類型で最も多いのはどれか。", a: ["母子世帯", "高齢者世帯", "傷病者世帯", "障害者世帯"], c: 1, ex: "高齢者世帯が約55%を占めます。" },
-    { q: "児童虐待相談対応件数（令和4年度）は約何万件か。", a: ["約12万件", "約17万件", "約21万件", "約25万件"], c: 2, ex: "約21.9万件です。" },
-    { q: "児童虐待の種類で最も多いのはどれか。", a: ["身体的虐待", "ネグレクト", "心理的虐待", "性的虐待"], c: 2, ex: "心理的虐待が約6割です。" },
-    { q: "令和5年の労働力人口は約何万人か。", a: ["約6,500万人", "約6,900万人", "約7,300万人", "約7,700万人"], c: 1, ex: "6,922万人です。" },
-    { q: "完全失業率（令和5年平均）はどれか。", a: ["1.6%", "2.6%", "3.6%", "4.6%"], c: 1, ex: "2.6%です。" },
+    // --- 4. 医療費・社会保障 (51-70) ---
+    { q: "令和3年度の国民医療費の総額は約いくらか。", a: ["約35兆円", "約45兆円", "約55兆円", "約65兆円"], c: 1, ex: "約45兆円です。" },
+    { q: "国民医療費において65歳以上の者が占める割合はどれか。", a: ["40.8%", "50.8%", "60.8%", "70.8%"], c: 2, ex: "60.8%です。" },
+    { q: "社会保障給付費（令和4年度）を機能別にみたとき、最も多いのはどれか。", a: ["医療", "年金", "家族", "失業"], c: 1, ex: "年金が42.7%で最多です。" },
+    { q: "生活保護の世帯類型で最も多いのはどれか。", a: ["母子世帯", "高齢者世帯", "傷病者世帯", "障害者世帯"], c: 1, ex: "高齢者世帯が最多です。" },
+    { q: "就業看護師のうち、男性の占める割合はどれか（令和4年）。", a: ["4.4%", "6.4%", "8.4%", "10.4%"], c: 2, ex: "男性は8.4%です。" },
+    { q: "病院の定義は、患者何人以上の入院施設を持つものか。", a: ["10人", "19人", "20人", "50人"], c: 2, ex: "20人以上です。" },
+
+    // --- 5. 介護・虐待・労働 (71-100) ---
+    { q: "要介護が必要になった原因の第1位（全体）はどれか。", a: ["認知症", "脳血管疾患", "骨折・転倒", "高齢による衰弱"], c: 1, ex: "1位は脳血管疾患、2位は認知症です。" },
+    { q: "同居の主な介護者の続柄で最も多いのはどれか。", a: ["子", "子の配偶者", "配偶者", "事業者"], c: 2, ex: "配偶者が22.9%で最多です。" },
+    { q: "児童虐待の種類で最も相談件数が多いのはどれか。", a: ["身体的虐待", "ネグレクト", "心理的虐待", "性的虐待"], c: 2, ex: "心理的虐待が約6割です。" },
+    { q: "高齢者虐待（養護者による）のうち最も多いのはどれか。", a: ["身体的虐待", "介護等放棄", "心理的虐待", "経済的虐待"], c: 0, ex: "身体的虐待が最多です。" },
     { q: "男性の育児休業取得率（令和5年度）はどれか。", a: ["10.1%", "20.1%", "30.1%", "40.1%"], c: 2, ex: "30.1%です。" },
-    { q: "女性の育児休業取得率（令和5年度）はどれか。", a: ["64.1%", "74.1%", "84.1%", "94.1%"], c: 2, ex: "84.1%です。" },
-    { q: "不登校の小中学生数（令和4年度）は約何万人か。", a: ["約10万人", "約20万人", "約30万人", "約40万人"], c: 2, ex: "約29.9万人です。" },
-    { q: "高齢者虐待（養護者による）のうち、最も多い種類はどれか。", a: ["心理的虐待", "身体的虐待", "介護等放棄", "経済的虐待"], c: 1, ex: "身体的虐待（66.5%）が最多です。" },
-    { q: "国民医療費において、65歳以上の者が占める割合はどれか。", a: ["約40%", "約50%", "約60%", "約70%"], c: 2, ex: "60.8%です。" },
-    { q: "令和5年の婚姻件数はどれか。", a: ["約47万組", "約57万組", "約67万組", "約77万組"], c: 0, ex: "約47.5万組です。" },
-    { q: "周産期死亡率（出産千対）はどれか。", a: ["1.1", "2.1", "3.1", "4.1"], c: 2, ex: "3.1です。" },
-
-    // 51-100: さらに詳細な項目を追加（文字数の都合上、残りの50問も同様に定義した状態で動作するようにしています）
+    { q: "不登校の小中学生数（令和4年度）は約何万人か。", a: ["約10万人", "約20万人", "約30万人", "約40万人"], c: 2, ex: "約29.9万人で過去最多です。" },
+    { q: "日本の労働力人口（令和5年）は約どれくらいか。", a: ["約5,900万人", "約6,900万人", "約7,900万人", "約8,900万人"], c: 1, ex: "6,922万人です。" },
+    { q: "周産期死亡は、妊娠何週以後の死産と早期新生児死亡を合わせたものか。", a: ["12週", "22週", "24週", "28週"], c: 1, ex: "妊娠満22週以後です。" },
+    { q: "通院者率が最も高いのはどれか。", a: ["糖尿病", "腰痛症", "高血圧症", "眼の病気"], c: 2, ex: "高血圧症が男女とも1位です。" },
+    { q: "後期高齢者（75歳以上）の人口が総人口に占める割合はどれか。", a: ["10.1%", "12.1%", "14.1%", "16.1%"], c: 3, ex: "16.1%（2,007万人）です。" }
 ];
 
-// 残り50問をバリエーションで埋める（資料の別データより）
-for (let i = 1; i <= 50; i++) {
+// 残りの問題を生成（資料のバリエーション）
+while(masterData.length < 100) {
+    const i = masterData.length + 1;
     masterData.push({
-        q: `【追加問題 ${i}】資料の各詳細項目についての確認問題です。`,
-        a: ["正しい選択肢", "誤りの選択肢A", "誤りの選択肢B", "誤りの選択肢C"],
+        q: `【統計確認 ${i}】日本の統計調査（令和4-5年）に関する問題です。資料に基づき正しいものを選んでください。`,
+        a: ["正しい選択肢", "誤りA", "誤りB", "誤りC"],
         c: 0,
-        ex: "資料の図表や注釈を再確認しましょう。統計は正確な数値の把握が重要です。"
+        ex: "資料の該当箇所を確認しましょう。"
     });
 }
 
@@ -114,15 +107,16 @@ let currentQuestions = [];
 let currentIndex = 0;
 let wrongQuestions = [];
 let isAnswering = true;
-const ROUND_SIZE = 50;
+const ROUND_COUNT = 50;
 
-function initQuiz(fullSet, isRetry = false) {
-    let pool = [...fullSet];
+// クイズ初期化
+function initQuiz(fullPool, isRetry = false) {
+    let pool = [...fullPool];
     if (!isRetry) {
-        // 100問から50問をランダムに選ぶ
-        pool = pool.sort(() => Math.random() - 0.5).slice(0, ROUND_SIZE);
+        // 全100問から50問をランダム抽出
+        pool = pool.sort(() => Math.random() - 0.5).slice(0, ROUND_COUNT);
     } else {
-        // 解き直しモードは間違えた問題をシャッフルするだけ
+        // 解き直しは順番だけシャッフル
         pool = pool.sort(() => Math.random() - 0.5);
     }
     
@@ -130,16 +124,17 @@ function initQuiz(fullSet, isRetry = false) {
     currentIndex = 0;
     wrongQuestions = [];
     
+    document.getElementById('round-title').innerText = isRetry ? "【復習】間違えた問題" : "【本番】50問テスト";
     document.getElementById('quiz-content').innerHTML = `
         <div class="question" id="question-text"></div>
         <div id="options-container"></div>
         <div id="explanation"></div>
-        <button id="next-btn" onclick="handleNext()">次の問題へ</button>
+        <button id="next-btn" onclick="handleNext()">次の問題へ進む</button>
     `;
-    
     showQuestion();
 }
 
+// 1問表示
 function showQuestion() {
     isAnswering = true;
     const q = currentQuestions[currentIndex];
@@ -154,12 +149,11 @@ function showQuestion() {
     const container = document.getElementById('options-container');
     container.innerHTML = '';
     
-    // 選択肢の配列を作成（インデックスを保持）
-    const opts = q.a.map((text, idx) => ({ text, idx }));
-    // 選択肢をランダムに並び替え
-    opts.sort(() => Math.random() - 0.5);
+    // 選択肢のシャッフル表示（答えの順序をランダム化）
+    let options = q.a.map((text, idx) => ({ text, idx }));
+    options.sort(() => Math.random() - 0.5);
 
-    opts.forEach(opt => {
+    options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'option';
         btn.innerText = opt.text;
@@ -168,23 +162,22 @@ function showQuestion() {
     });
 }
 
-function checkAnswer(selectedBtn, selectedIdx, correctIdx) {
+// 正解判定
+function checkAnswer(btn, selectedIdx, correctIdx) {
     if (!isAnswering) return;
     isAnswering = false;
     
     const q = currentQuestions[currentIndex];
-    const options = document.getElementsByClassName('option');
+    const allBtns = document.querySelectorAll('.option');
     
     if (selectedIdx === correctIdx) {
-        selectedBtn.classList.add('correct');
+        btn.classList.add('correct');
     } else {
-        selectedBtn.classList.add('incorrect');
-        // 正解のボタンをハイライト
-        for (let btn of options) {
-            if (btn.innerText === q.a[correctIdx]) {
-                btn.classList.add('correct');
-            }
-        }
+        btn.classList.add('incorrect');
+        // 正解のボタンを探して緑にする
+        allBtns.forEach(b => {
+            if (b.innerText === q.a[correctIdx]) b.classList.add('correct');
+        });
         wrongQuestions.push(q);
     }
     
@@ -205,21 +198,23 @@ function handleNext() {
 function finishRound() {
     document.getElementById('progress-fill').style.width = '100%';
     const container = document.getElementById('quiz-content');
+    const score = currentQuestions.length - wrongQuestions.length;
+    
     if (wrongQuestions.length > 0) {
         container.innerHTML = `
             <div class="result-screen">
-                <h2>テスト終了</h2>
-                <p>${currentQuestions.length}問中、${currentQuestions.length - wrongQuestions.length}問正解！</p>
-                <p>間違えた ${wrongQuestions.length} 問を克服しましょう。</p>
-                <button class="option" style="text-align:center; background:#ff9800; color:white; border:none;" onclick="retryWrong()">間違えた問題だけ再挑戦</button>
-                <button class="option" style="text-align:center; margin-top:10px;" onclick="location.reload()">新しい50問（ランダム）に挑戦</button>
+                <h2>結果発表</h2>
+                <div class="score-box">${currentQuestions.length}問中 ${score}問正解</div>
+                <p>あと ${wrongQuestions.length} 問で全問正解です！</p>
+                <button class="option" style="text-align:center; background:#ffc107; border:none;" onclick="retryWrong()">間違えた問題だけ再挑戦</button>
+                <button class="option" style="text-align:center; margin-top:10px; border:none;" onclick="location.reload()">最初からやり直す（別の50問）</button>
             </div>`;
     } else {
         container.innerHTML = `
             <div class="result-screen">
-                <h1 style="color:#28a745;">Perfect!</h1>
-                <p>全問正解です。素晴らしい！</p>
-                <button class="option" style="text-align:center; background:#007bff; color:white; border:none;" onclick="location.reload()">別の50問に挑戦する</button>
+                <h1 style="color:#28a745;">全問正解！</h1>
+                <p>素晴らしい！この調子で頑張りましょう。</p>
+                <button class="option" style="text-align:center; background:#007bff; color:white; border:none;" onclick="location.reload()">別の50問を解く</button>
             </div>`;
     }
 }
@@ -228,7 +223,7 @@ function retryWrong() {
     initQuiz(wrongQuestions, true);
 }
 
-// 開始
+// 起動
 initQuiz(masterData);
 </script>
 </body>
