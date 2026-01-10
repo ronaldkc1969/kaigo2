@@ -1,609 +1,210 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <title>看護師国試 社会保障クイズ（数値問題30問・単一正解）</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 16px;
-      line-height: 1.6;
-      background: #f5f5f5;
-    }
-    h1 {
-      font-size: 1.4rem;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    #quiz-container {
-      background: #fff;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .question-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-      color: #555;
-    }
-    .question-text {
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .answers {
-      margin-bottom: 12px;
-    }
-    .answers label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 4px;
-      transition: background-color 0.15s, color 0.15s;
-    }
-    .answers input[type="radio"] {
-      margin-right: 4px;
-    }
-
-    .correct-answer {
-      background-color: #e8f5e9;
-      color: #1b5e20;
-      font-weight: 600;
-      border: 1px solid #a5d6a7;
-    }
-    .wrong-answer {
-      background-color: #ffebee;
-      color: #c62828;
-      border: 1px solid #ef9a9a;
-    }
-    .answer-badge {
-      font-size: 0.75rem;
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
-    .badge-correct {
-      background-color: #2e7d32;
-      color: #fff;
-    }
-    .badge-wrong {
-      background-color: #c62828;
-      color: #fff;
-    }
-
-    #explanation {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 6px;
-      background: #eef7ff;
-      border: 1px solid #c5defa;
-      display: none;
-      white-space: pre-wrap;
-    }
-    #controls {
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    button {
-      cursor: pointer;
-      padding: 8px 14px;
-      border-radius: 4px;
-      border: none;
-      background: #1976d2;
-      color: #fff;
-      font-size: 0.9rem;
-    }
-    button.secondary {
-      background: #777;
-    }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-    #result {
-      margin-top: 16px;
-      font-weight: 600;
-    }
-    #round-info {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #444;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>第115回看護師国試 統計完全攻略50問</title>
+    <style>
+        body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif; background-color: #f5f7f9; color: #333; line-height: 1.6; padding: 20px; }
+        #quiz-container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; max-width: 700px; margin: 0 auto; }
+        .header { border-bottom: 2px solid #e1e8ed; margin-bottom: 20px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .question { font-weight: bold; font-size: 1.15em; margin-bottom: 20px; min-height: 3em; }
+        .option { display: block; width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #dce4ec; border-radius: 10px; cursor: pointer; text-align: left; background: #fff; font-size: 1em; transition: all 0.2s; }
+        .option:hover { background: #f0f7ff; border-color: #2196f3; }
+        .correct { background-color: #d4edda !important; border-color: #28a745 !important; font-weight: bold; color: #155724; }
+        .incorrect { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+        #explanation { margin-top: 20px; padding: 15px; border-radius: 10px; background: #fff3cd; border-left: 5px solid #ffc107; display: none; }
+        #next-btn { margin-top: 20px; padding: 15px; background: #007bff; color: white; border: none; border-radius: 10px; cursor: pointer; display: none; width: 100%; font-size: 1.1em; font-weight: bold; }
+        #next-btn:hover { background: #0056b3; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #4caf50; width: 0%; transition: width 0.3s; }
+        .result-screen { text-align: center; padding: 30px; }
+    </style>
 </head>
 <body>
-  <h1>看護師国家試験 社会保障クイズ（数値問題30問）</h1>
-  <div id="quiz-container">
-    <div class="question-header">
-      <div id="q-number"></div>
-      <div id="q-meta"></div>
+
+<div id="quiz-container">
+    <div class="header">
+        <div id="round-title">本番モード</div>
+        <div id="status-text"></div>
     </div>
-    <div id="question" class="question-text"></div>
-    <div id="answers" class="answers"></div>
-
-    <div id="explanation"></div>
-
-    <div id="controls">
-      <button id="show-answer">解答・解説を表示</button>
-      <button id="next" class="secondary">次の問題へ</button>
-      <button id="restart" class="secondary">最初からやり直す</button>
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+    
+    <div id="quiz-content">
+        <div class="question" id="question-text"></div>
+        <div id="options-container"></div>
+        <div id="explanation"></div>
+        <button id="next-btn" onclick="handleNext()">次の問題へ</button>
     </div>
+</div>
 
-    <div id="result"></div>
-    <div id="round-info"></div>
-  </div>
+<script>
+// 50問のユニークな問題データ
+const masterData = [
+    { q: "令和5年の日本の総人口（10月1日現在）はどれか。", a: ["1億2,152万人", "1億2,435万人", "1億2,610万人", "1億2,800万人"], c: 1, ex: "総人口は1億2,435万2千人。前年に比べ約59万人の減少です。" },
+    { q: "日本の年少人口（0〜14歳）の割合に最も近いのはどれか。", a: ["11.4%", "13.4%", "15.4%", "17.4%"], c: 0, ex: "年少人口は1,417万人で、割合は11.4%と過去最低を更新しています。" },
+    { q: "令和5年の老年人口（65歳以上）の割合はどれか。", a: ["25.1%", "27.1%", "29.1%", "31.1%"], c: 2, ex: "老年人口は3,622万人、割合は29.1%です。" },
+    { q: "後期高齢者（75歳以上）が総人口に占める割合はどれか。", a: ["10.1%", "16.1%", "20.1%", "25.1%"], c: 1, ex: "75歳以上人口は2,007万人で、初めて2,000万人を超え、割合は16.1%となりました。" },
+    { q: "将来推計人口で、人口が1億人を下回ると予測されている年はどれか。", a: ["2045年", "2056年", "2065年", "2070年"], c: 1, ex: "2056年に1億人を下回り、2070年には8,700万人になると推計されています。" },
+    { q: "令和5年の平均世帯人員はどれか。", a: ["2.03人", "2.23人", "2.43人", "2.63人"], c: 1, ex: "1世帯あたりの人員は2.23人です。" },
+    { q: "世帯構造で最も多いものはどれか。", a: ["単独世帯", "夫婦のみの世帯", "夫婦と未婚の子のみの世帯", "三世代世帯"], c: 0, ex: "単独世帯が32.9%で最も多く、次いで「夫婦と未婚の子のみ」の25.2%です。" },
+    { q: "65歳以上の者がいる世帯において、最も多い世帯構造はどれか。", a: ["単独世帯", "夫婦のみの世帯", "親と未婚の子のみの世帯", "三世代世帯"], c: 1, ex: "高齢者世帯の中では「夫婦のみの世帯」が32.1%で最多です。僅差で単独世帯が続きます。" },
+    { q: "令和5年の合計特殊出生率はどれか。", a: ["1.10", "1.20", "1.26", "1.30"], c: 1, ex: "令和5年は1.20で過去最低となりました。" },
+    { q: "出生における第1子出生時の母親の平均年齢はどれか。", a: ["29.9歳", "30.3歳", "30.9歳", "31.0歳"], c: 3, ex: "令和5年の第1子出生時平均年齢は31.0歳です。" },
+    { q: "令和5年の死因順位の第2位はどれか。", a: ["悪性新生物", "心疾患", "老衰", "脳血管疾患"], c: 1, ex: "1位:悪性新生物、2位:心疾患、3位:老衰、4位:脳血管疾患の順です。" },
+    { q: "老衰による死亡率が上昇している主な要因はどれか。", a: ["診断技術の低下", "高齢者人口の増加", "感染症の減少", "生活習慣病の克服"], c: 1, ex: "超高齢社会により、老衰死の報告が増加しています。" },
+    { q: "男性の悪性新生物による死亡で、部位別第1位はどれか。", a: ["胃", "大腸", "肺", "肝臓"], c: 2, ex: "男性の1位は「肺」です。次いで大腸、胃の順です。" },
+    { q: "女性の悪性新生物による死亡で、部位別第1位はどれか。", a: ["乳房", "子宮", "肺", "大腸"], c: 3, ex: "女性の1位は「大腸」です。次いで肺、膵臓の順です。" },
+    { q: "令和5年の男性の平均寿命はどれか。", a: ["80.09年", "81.09年", "81.47年", "82.13年"], c: 1, ex: "男性は81.09年です。" },
+    { q: "令和5年の女性の平均寿命はどれか。", a: ["86.14年", "87.14年", "87.57年", "88.01年"], c: 1, ex: "女性は87.14年です。" },
+    { q: "「健康上の問題で日常生活が制限されることなく生活できる期間」を何というか。", a: ["平均余命", "平均寿命", "健康寿命", "生存期間"], c: 2, ex: "これが健康寿命の定義です。平均寿命との差の短縮が課題です。" },
+    { q: "令和4年の有訴者率（人口千対）で、女性の第1位はどれか。", a: ["腰痛", "肩こり", "手足の関節痛", "頭痛"], c: 1, ex: "女性は1位「肩こり」、2位「腰痛」。男性は1位「腰痛」、2位「肩こり」です。" },
+    { q: "令和4年の通院者率（人口千対）で、男女ともに第1位の傷病はどれか。", a: ["腰痛症", "糖尿病", "歯の病気", "高血圧症"], c: 3, ex: "通院原因のトップは圧倒的に高血圧症です。" },
+    { q: "令和5年の乳児死亡率（出生千対）に最も近いのはどれか。", a: ["1.7", "2.7", "3.7", "4.7"], c: 0, ex: "日本の乳児死亡率は1.7で、世界でも極めて低い水準です。" },
+    { q: "令和5年の周産期死亡率（出産千対）はどれか。", a: ["2.1", "3.1", "4.1", "5.1"], c: 1, ex: "周産期死亡率は3.1（妊娠22週以降の死産＋早期新生児死亡）です。" },
+    { q: "5〜9歳の死因で第1位はどれか。", a: ["悪性新生物", "不慮の事故", "心疾患", "肺炎"], c: 1, ex: "5〜9歳の1位は不慮の事故、2位が悪性新生物です。" },
+    { q: "10〜14歳の死因で第1位はどれか。", a: ["不慮の事故", "自殺", "悪性新生物", "心疾患"], c: 1, ex: "10歳以降、多くの年代で「自殺」が上位に入ります。" },
+    { q: "不慮の事故による死亡のうち、最も多い種類はどれか。", a: ["交通事故", "転倒・転落", "誤嚥・窒息", "不慮の溺死"], c: 2, ex: "食物の詰まり等による「誤嚥・窒息」が最も多くなっています。" },
+    { q: "令和3年度の国民医療費の総額は約いくらか。", a: ["約35兆円", "約45兆円", "約55兆円", "約65兆円"], c: 1, ex: "国民医療費は約45兆円（45兆859億円）です。" },
+    { q: "国民医療費の財源で、最も割合が高いのはどれか。", a: ["公費（税金）", "保険料", "患者自己負担", "その他"], c: 1, ex: "保険料が49.4%と約半分を占めています。" },
+    { q: "人口当たりの病床数が世界的にみて日本で多いのはどの病床か。", a: ["一般病床", "療養病床", "精神病床", "感染症病床"], c: 2, ex: "日本は精神病床数や平均在院日数が他国に比べ多いのが特徴です。" },
+    { q: "令和4年における看護師の就業人数に最も近いのはどれか。", a: ["約100万人", "約130万人", "約170万人", "約200万人"], c: 1, ex: "就業看護師数は約131万人です（准看護師・保健師等を含まない数値）。" },
+    { q: "就業看護師の勤務場所で、最も多いのはどれか。", a: ["診療所", "訪問看護ステーション", "病院", "介護老人保健施設"], c: 2, ex: "病院が約7割を占めています。" },
+    { q: "病院の定義は、何人以上の患者を入院させる施設か。", a: ["10人", "19人", "20人", "50人"], c: 2, ex: "20人以上が病院、19人以下が診療所です。" },
+    { q: "令和4年の介護保険制度における要介護・要支援認定者数は約何万人か。", a: ["約400万人", "約500万人", "約690万人", "約800万人"], c: 2, ex: "認定者数は約690万人で、増加傾向にあります。" },
+    { q: "要介護者等のいる世帯において、主な介護者の続柄で最も多いのはどれか。", a: ["別居の家族", "同居の配偶者", "同居の子", "事業者"], c: 1, ex: "同居の配偶者が22.9%で最も多くなっています（老老介護の増加）。" },
+    { q: "要介護度別にみた「主な介護の悩み」で、全般的に多いのはどれか。", a: ["金銭的負担", "外出できない", "家族の人間関係", "排泄の介助"], c: 1, ex: "「外出できない」「睡眠不足」などの身体的・精神的負担が上位です。" },
+    { q: "令和5年の労働力人口はどれか。", a: ["6,523万人", "6,922万人", "7,200万人", "7,500万人"], c: 1, ex: "労働力人口は6,922万人です。" },
+    { q: "令和5年の完全失業率はどれか。", a: ["1.6%", "2.6%", "3.6%", "4.6%"], c: 1, ex: "完全失業率は2.6%です。" },
+    { q: "育児休業取得率（令和5年度）において、女性の割合はどれか。", a: ["約64%", "約74%", "約84%", "約94%"], c: 2, ex: "女性は84.1%です。" },
+    { q: "育児休業取得率（令和5年度）において、男性の割合はどれか。", a: ["10.1%", "20.1%", "30.1%", "40.1%"], c: 2, ex: "男性は30.1%と、近年急上昇しています。" },
+    { q: "日本の将来推計において、2070年の高齢化率は約何％になるとされているか。", a: ["約33%", "約39%", "約45%", "約50%"], c: 1, ex: "2070年には約38.7%（約2.6人に1人が高齢者）になると推計されています。" },
+    { q: "令和4年の児童虐待相談対応件数は約何万件か。", a: ["約11万件", "約15万件", "約21万件", "約30万件"], c: 2, ex: "21万9,170件で、過去最多を更新し続けています。" },
+    { q: "児童虐待の種類で、相談件数が最も多いものはどれか。", a: ["身体的虐待", "ネグレクト", "性的虐待", "心理的虐待"], c: 3, ex: "心理的虐待（面前DV等）が約6割を占めます。" },
+    { q: "令和4年の高齢者虐待において、発生場所で最も多いのはどれか。", a: ["養護者（家庭）", "養老施設", "病院", "地域"], c: 0, ex: "養護者（家庭内）での虐待が圧倒的に多いです。" },
+    { q: "令和4年度の不登校児童生徒数（小中学校）は約何万人か。", a: ["約10万人", "約20万人", "約30万人", "約40万人"], c: 2, ex: "約29.9万人（約30万人）で、過去最多です。" },
+    { q: "がん対策推進基本計画（第4期）で重点置かれているのはどれか。", a: ["予防と早期発見", "治療の標準化", "がんとの共生", "全て"], c: 3, ex: "「予防」「医療」「共生」が3本柱です。" },
+    { q: "国民健康・栄養調査で、習慣的喫煙者の割合（男性）に最も近いのはどれか。", a: ["約15%", "約25%", "約35%", "約45%"], c: 1, ex: "男性は約25.4%、女性は7.7%（令和元年調査）です。" },
+    { q: "1日の平均睡眠時間が6時間未満の者の割合が最も多い年代はどれか。", a: ["20歳代", "50歳代", "70歳代", "80歳以上"], c: 1, ex: "働き盛りの40〜50代で睡眠不足の割合が高い傾向にあります。" },
+    { q: "日本の公的年金制度は何階建てといわれるか。", a: ["1階建て", "2階建て", "3階建て", "4階建て"], c: 1, ex: "国民年金と厚生年金の「2階建て」構造です。" },
+    { q: "介護保険の第2号被保険者の対象年齢は何歳からか。", a: ["40歳", "45歳", "60歳", "65歳"], c: 0, ex: "40歳から64歳が第2号被保険者です。" },
+    { q: "生活保護の扶助の種類で、医療費に充てられるのはどれか。", a: ["生活扶助", "教育扶助", "住宅扶助", "医療扶助"], c: 3, ex: "医療費は「医療扶助」として現物給付されます。" },
+    { q: "生活保護の被保護世帯において、最も多い世帯はどれか。", a: ["母子世帯", "傷病・障害者世帯", "高齢者世帯", "その他"], c: 2, ex: "高齢者世帯が約半数を占めています。" },
+    { q: "令和5年の婚姻件数はどれか。", a: ["約47万組", "約57万組", "約67万組", "約77万組"], c: 0, ex: "婚姻件数は47万4,717組で、戦後初めて50万組を割り込みました。" }
+];
 
-  <script>
-    // 数値に関する単一正解問題のみ
-    const allNumericQuestions = [
-      {
-        id: 1,
-        type: "人口動態",
-        text: "2023年における日本の合計特殊出生率で正しいのはどれか。",
-        choices: ["1.00", "1.20", "1.50", "1.80"],
-        correctIndex: 1,
-        explanation:
-"2023年の合計特殊出生率は1.20で、過去最低を更新した。人口維持に必要な水準（約2.07）を大きく下回っている。"
-      },
-      {
-        id: 2,
-        type: "人口動態",
-        text: "2023年における日本人女性の平均寿命で正しいのはどれか。",
-        choices: ["83.14歳", "85.14歳", "87.14歳", "89.14歳"],
-        correctIndex: 2,
-        explanation:
-"2023年の日本人女性の平均寿命は87.14歳である。男性は81.09歳であり、世界的にも高い水準にある。"
-      },
-      {
-        id: 3,
-        type: "人口動態",
-        text: "2023年における出生数で最も近いのはどれか。",
-        choices: ["約52万人", "約62万人", "約73万人", "約83万人"],
-        correctIndex: 2,
-        explanation:
-"2023年の出生数は約72万7千人で、統計開始以来最少となった。"
-      },
-      {
-        id: 4,
-        type: "人口動態",
-        text: "2024年における日本の高齢化率（65歳以上人口の割合）で正しいのはどれか。",
-        choices: ["23.3％", "26.3％", "29.3％", "32.3％"],
-        correctIndex: 2,
-        explanation:
-"2024年の高齢化率は29.3％であり、65歳以上人口は約3,625万人である。"
-      },
-      {
-        id: 5,
-        type: "人口動態",
-        text: "2024年における75歳以上人口の総人口に占める割合で正しいのはどれか。",
-        choices: ["10.8％", "13.8％", "16.8％", "19.8％"],
-        correctIndex: 2,
-        explanation:
-"2024年の75歳以上人口は約2,076万人で、総人口の16.8％を占める。"
-      },
-      {
-        id: 6,
-        type: "医療費",
-        text: "令和5年度（2023年度）の国民医療費で正しいのはどれか。",
-        choices: ["約38兆円", "約43兆円", "約48兆915億円", "約53兆円"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の国民医療費は48兆915億円で、3年連続で過去最高を更新した。"
-      },
-      {
-        id: 7,
-        type: "医療費",
-        text: "令和5年度（2023年度）における人口1人当たりの国民医療費で最も近いのはどれか。",
-        choices: ["28万6,700円", "33万6,700円", "38万6,700円", "43万6,700円"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の1人当たり国民医療費は38万6,700円であり、前年から3.5％増加している。"
-      },
-      {
-        id: 8,
-        type: "医療費",
-        text: "令和5年度（2023年度）における後期高齢者医療費の総額で最も近いのはどれか。",
-        choices: ["9兆円", "14兆円", "19兆円", "24兆円"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の後期高齢者医療費は19兆1,503億円で、国民医療費全体の約39.8％を占める。"
-      },
-      {
-        id: 9,
-        type: "医療費",
-        text: "75歳以上の後期高齢者における1人当たり医療費（令和5年度）で正しいのはどれか。",
-        choices: ["56万5,000円", "76万5,000円", "96万5,000円", "116万5,000円"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の75歳以上の1人当たり医療費は96万5,000円で、75歳未満の約3.8倍となっている。"
-      },
-      {
-        id: 10,
-        type: "医療費",
-        text: "令和5年度（2023年度）の国民医療費の財源構成について、最も大きな割合を占める財源はどれか。",
-        choices: ["患者負担", "保険料", "公費", "その他"],
-        correctIndex: 1,
-        explanation:
-"令和5年度の国民医療費の財源構成で最も大きいのは保険料で、約50％を占める。"
-      },
-      {
-        id: 11,
-        type: "介護保険",
-        text: "令和5年度（2023年度）における要介護・要支援認定者数で最も近いのはどれか。",
-        choices: ["508万人", "608万人", "708万人", "808万人"],
-        correctIndex: 2,
-        explanation:
-"令和5年度末の要介護・要支援認定者数は708万人で、初めて700万人を超えた。"
-      },
-      {
-        id: 12,
-        type: "介護保険",
-        text: "令和5年度（2023年度）における65歳以上高齢者の要介護認定率で正しいのはどれか。",
-        choices: ["13.4％", "16.4％", "19.4％", "22.4％"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の65歳以上高齢者に占める要介護・要支援認定者の割合は19.4％である。"
-      },
-      {
-        id: 13,
-        type: "介護保険",
-        text: "令和5年度（2023年度）の介護保険給付費で最も近いのはどれか。",
-        choices: ["5兆8,263億円", "8兆8,263億円", "10兆8,263億円", "12兆8,263億円"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の介護保険給付費は10兆8,263億円で、過去最高を更新している。"
-      },
-      {
-        id: 14,
-        type: "生活保護",
-        text: "令和5年度（2023年度）における生活保護の被保護実世帯数で最も近いのはどれか。",
-        choices: ["125万世帯", "145万世帯", "165万世帯", "185万世帯"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の生活保護被保護実世帯数は165万478世帯である。"
-      },
-      {
-        id: 15,
-        type: "生活保護",
-        text: "令和5年度（2023年度）における生活保護の被保護実人員で最も近いのはどれか。",
-        choices: ["172万人", "202万人", "232万人", "262万人"],
-        correctIndex: 1,
-        explanation:
-"令和5年度の生活保護被保護実人員は202万4,586人である。"
-      },
-      {
-        id: 16,
-        type: "生活保護",
-        text: "令和5年度（2023年度）における生活保護の保護率（人口100人対）で正しいのはどれか。",
-        choices: ["0.62％", "1.62％", "2.62％", "3.62％"],
-        correctIndex: 1,
-        explanation:
-"令和5年度の保護率は1.62％であり、約62人に1人が生活保護を受給している。"
-      },
-      {
-        id: 17,
-        type: "障害者福祉",
-        text: "令和5年度（2023年度）における身体障害者手帳交付台帳登載数で最も近いのはどれか。",
-        choices: ["378万人", "428万人", "478万人", "528万人"],
-        correctIndex: 2,
-        explanation:
-"令和5年度末の身体障害者手帳交付台帳登載数は約478万3千人である。"
-      },
-      {
-        id: 18,
-        type: "障害者福祉",
-        text: "令和5年度（2023年度）における療育手帳交付台帳登載数で最も近いのはどれか。",
-        choices: ["88万人", "108万人", "128万人", "148万人"],
-        correctIndex: 2,
-        explanation:
-"令和5年度末の療育手帳交付台帳登載数は約128万1千人である。"
-      },
-      {
-        id: 19,
-        type: "労働・賃金",
-        text: "2023年度（令和5年度）の地域別最低賃金の全国加重平均で正しいのはどれか。",
-        choices: ["861円", "931円", "1,004円", "1,074円"],
-        correctIndex: 2,
-        explanation:
-"2023年度の最低賃金は全国加重平均で1,004円となり、初めて1,000円を超えた。"
-      },
-      {
-        id: 20,
-        type: "労働・賃金",
-        text: "2023年4月から中小企業にも適用された月60時間超の時間外労働の割増賃金率で正しいのはどれか。",
-        choices: ["25％", "35％", "50％", "75％"],
-        correctIndex: 2,
-        explanation:
-"2023年4月から中小企業でも、月60時間を超える時間外労働の割増賃金率が50％となった。"
-      },
-      {
-        id: 21,
-        type: "高齢化",
-        text: "2024年における65歳以上人口（約3,625万人）と75歳以上人口（約2,076万人）について正しい組み合わせはどれか。",
-        choices: [
-          "65歳以上：約3,225万人／75歳以上：約1,876万人",
-          "65歳以上：約3,625万人／75歳以上：約2,076万人",
-          "65歳以上：約4,025万人／75歳以上：約2,276万人",
-          "65歳以上：約3,825万人／75歳以上：約1,976万人"
-        ],
-        correctIndex: 1,
-        explanation:
-"2024年の65歳以上人口は約3,625万人、75歳以上人口は約2,076万人である。"
-      },
-      {
-        id: 22,
-        type: "医療費（年齢差）",
-        text: "令和5年度（2023年度）の75歳以上と75歳未満の1人当たり医療費について正しい組み合わせはどれか。",
-        choices: [
-          "75歳以上：96万5,000円／75歳未満：25万2,000円",
-          "75歳以上：76万5,000円／75歳未満：35万2,000円",
-          "75歳以上：56万5,000円／75歳未満：15万2,000円",
-          "75歳以上：116万5,000円／75歳未満：45万2,000円"
-        ],
-        correctIndex: 0,
-        explanation:
-"令和5年度の75歳以上の1人当たり医療費は96万5,000円、75歳未満は25万2,000円である。"
-      },
-      {
-        id: 23,
-        type: "介護保険（率）",
-        text: "令和5年度（2023年度）の介護保険における65歳以上の要介護・要支援認定率19.4％について正しい説明はどれか。",
-        choices: [
-          "約10人に1人が認定されている",
-          "約5人に1人が認定されている",
-          "約3人に1人が認定されている",
-          "約2人に1人が認定されている"
-        ],
-        correctIndex: 1,
-        explanation:
-"要介護・要支援認定率19.4％は、65歳以上高齢者の約5人に1人が認定を受けていることを意味する。"
-      },
-      {
-        id: 24,
-        type: "最低賃金",
-        text: "2023年度（令和5年度）の最低賃金全国加重平均額1,004円について、2022年度からの引き上げ額で正しいのはどれか。",
-        choices: ["13円", "23円", "33円", "43円"],
-        correctIndex: 3,
-        explanation:
-"2023年度の最低賃金全国加重平均は1,004円で、2022年度から43円引き上げられた。"
-      },
-      {
-        id: 25,
-        type: "医療費（対GDP比）",
-        text: "令和5年度（2023年度）の国民医療費の対GDP比で最も近いのはどれか。",
-        choices: ["4.08％", "6.08％", "8.08％", "10.08％"],
-        correctIndex: 2,
-        explanation:
-"令和5年度の国民医療費の対GDP比は約8.08％である。"
-      },
-      {
-        id: 26,
-        type: "障害者福祉（構成）",
-        text: "身体障害者手帳交付者のうち、肢体不自由と内部障害の2つで全体のおよそ何割を占めるか。",
-        choices: ["約3割", "約5割", "約8割", "約9割"],
-        correctIndex: 2,
-        explanation:
-"肢体不自由が約48.8％、内部障害が約34.0％であり、両者でおよそ8割を占める。"
-      },
-      {
-        id: 27,
-        type: "高齢化と医療費",
-        text: "令和5年度（2023年度）の国民医療費に占める65歳以上の医療費の割合として最も近いのはどれか。",
-        choices: ["約30％", "約40％", "約50％", "約60％"],
-        correctIndex: 3,
-        explanation:
-"国民医療費に占める65歳以上の医療費は約60％とされている。"
-      },
-      {
-        id: 28,
-        type: "社会保障給付費",
-        text: "日本の社会保障給付費全体のうち、医療と介護が占める割合として最も近いのはどれか。",
-        choices: ["約2割", "約3割", "約4割", "約5割"],
-        correctIndex: 2,
-        explanation:
-"社会保障給付費全体のうち、医療と介護が占める割合はおおむね4割前後とされる。"
-      },
-      {
-        id: 29,
-        type: "生活保護（率のイメージ）",
-        text: "生活保護の保護率1.62％は、人口1,000人当たり何人程度が生活保護を受給していることを意味するか。",
-        choices: ["約6人", "約12人", "約16人", "約26人"],
-        correctIndex: 2,
-        explanation:
-"1.62％は人口1,000人当たり約16人が生活保護を受給していることを意味する。"
-      },
-      {
-        id: 30,
-        type: "介護保険（財政規模）",
-        text: "令和5年度（2023年度）の介護保険給付費10兆8,263億円は、およそ何兆円と捉えるのが適切か。",
-        choices: ["約5兆円", "約8兆円", "約11兆円", "約15兆円"],
-        correctIndex: 2,
-        explanation:
-"10兆8,263億円は概ね約11兆円と捉えることができる。"
-      }
-    ];
+let currentQuestions = [];
+let currentIndex = 0;
+let wrongQuestions = [];
+let isAnswering = true;
+let isRetryMode = false;
 
-    // シャッフル
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+// クイズ開始・初期化
+function initQuiz(questionSet, isRetry = false) {
+    isRetryMode = isRetry;
+    // 重複を避けるため、渡されたセットをシャッフル
+    currentQuestions = [...questionSet].sort(() => Math.random() - 0.5);
+    currentIndex = 0;
+    wrongQuestions = [];
+    
+    document.getElementById('round-title').innerText = isRetry ? "復習モード（間違えた問題）" : "本番モード（全50問）";
+    document.getElementById('quiz-content').innerHTML = `
+        <div class="question" id="question-text"></div>
+        <div id="options-container"></div>
+        <div id="explanation"></div>
+        <button id="next-btn" onclick="handleNext()">次の問題へ</button>
+    `;
+    
+    showQuestion();
+}
 
-    let quizQuestions = [];
-    let wrongQuestions = [];
-    let currentIndex = 0;
-    let round = 1;
-    let answeredCurrent = false;
-
-    const qNumberEl     = document.getElementById("q-number");
-    const qMetaEl       = document.getElementById("q-meta");
-    const questionEl    = document.getElementById("question");
-    const answersEl     = document.getElementById("answers");
-    const explanationEl = document.getElementById("explanation");
-    const showAnswerBtn = document.getElementById("show-answer");
-    const nextBtn       = document.getElementById("next");
-    const restartBtn    = document.getElementById("restart");
-    const resultEl      = document.getElementById("result");
-    const roundInfoEl   = document.getElementById("round-info");
-
-    function pick30RandomQuestions() {
-      const cloned = [...allNumericQuestions];
-      shuffle(cloned);
-      return cloned.slice(0, 30);
-    }
-
-    function renderQuestion(index) {
-      const q = quizQuestions[index];
-      if (!q) return;
-
-      answeredCurrent = false;
-
-      qNumberEl.textContent = `Q${index + 1} / ${quizQuestions.length}`;
-      qMetaEl.textContent   = q.type || "";
-      questionEl.textContent = q.text;
-      answersEl.innerHTML    = "";
-      explanationEl.style.display = "none";
-      explanationEl.textContent = "";
-      resultEl.textContent   = "";
-
-      q.choices.forEach((choice, i) => {
-        const label = document.createElement("label");
-        const input = document.createElement("input");
-        const badge = document.createElement("span");
-        const text  = document.createElement("span");
-
-        input.type = "radio";
-        input.name = "answer";
-        input.value = i;
-
-        badge.className = "answer-badge";
-        badge.textContent = "";
-
-        text.textContent = choice;
-
-        label.appendChild(input);
-        label.appendChild(badge);
-        label.appendChild(text);
-        answersEl.appendChild(label);
-      });
-
-      roundInfoEl.textContent =
-        round === 1
-          ? "【1周目】数値問題30問に挑戦中"
-          : "【2周目】1周目で間違えた問題のみ再出題中";
-    }
-
-    function getSelectedIndex() {
-      const inputs = answersEl.querySelectorAll("input[type=radio]");
-      for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].checked) return i;
-      }
-      return null;
-    }
-
-    function gradeCurrentQuestion() {
-      const q = quizQuestions[currentIndex];
-      const selected = getSelectedIndex();
-
-      if (selected === null) {
-        alert("答えを1つ選択してください。");
-        return false;
-      }
-
-      const labels = answersEl.querySelectorAll("label");
-      const isCorrect = selected === q.correctIndex;
-
-      labels.forEach((label, i) => {
-        label.classList.remove("correct-answer", "wrong-answer");
-        const badge = label.querySelector(".answer-badge");
-        badge.textContent = "";
-        badge.classList.remove("badge-correct", "badge-wrong");
-
-        if (i === q.correctIndex) {
-          label.classList.add("correct-answer");
-          badge.textContent = "✔ 正解";
-          badge.classList.add("badge-correct");
-        }
-        if (i === selected && i !== q.correctIndex) {
-          label.classList.add("wrong-answer");
-          badge.textContent = "✖";
-          badge.classList.add("badge-wrong");
-        }
-      });
-
-      resultEl.textContent = isCorrect ? "正解です。" : "不正解です。";
-      explanationEl.style.display = "block";
-      const correctText = q.choices[q.correctIndex];
-      explanationEl.textContent = `【正解】${correctText}\n\n【解説】\n${q.explanation}`;
-
-      if (round === 1 && !isCorrect) {
-        wrongQuestions.push(q);
-      }
-
-      answeredCurrent = true;
-      return true;
-    }
-
-    showAnswerBtn.addEventListener("click", () => {
-      gradeCurrentQuestion();
+// 問題を表示
+function showQuestion() {
+    isAnswering = true;
+    const q = currentQuestions[currentIndex];
+    
+    // 進捗表示
+    const total = currentQuestions.length;
+    document.getElementById('status-text').innerText = `${currentIndex + 1} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${((currentIndex) / total) * 100}%`;
+    
+    document.getElementById('question-text').innerText = q.q;
+    document.getElementById('explanation').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+    
+    q.a.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(i);
+        container.appendChild(btn);
     });
+}
 
-    nextBtn.addEventListener("click", () => {
-      if (!answeredCurrent) {
-        const ok = gradeCurrentQuestion();
-        if (!ok) return;
-      }
-
-      currentIndex++;
-      if (currentIndex >= quizQuestions.length) {
-        if (round === 1) {
-          if (wrongQuestions.length === 0) {
-            resultEl.textContent = "1周目が終了しました。全問正解です。お疲れさまでした。";
-            return;
-          } else {
-            quizQuestions = [...wrongQuestions];
-            wrongQuestions = [];
-            shuffle(quizQuestions);
-            round = 2;
-            currentIndex = 0;
-            alert("1周目が終了しました。これから間違えた問題だけをもう一度解きます。");
-            renderQuestion(currentIndex);
-            return;
-          }
-        } else {
-          resultEl.textContent = "2周目が終了しました。お疲れさまでした。";
-          return;
+// 判定
+function checkAnswer(selected) {
+    if (!isAnswering) return;
+    isAnswering = false;
+    
+    const q = currentQuestions[currentIndex];
+    const options = document.getElementsByClassName('option');
+    
+    if (selected === q.c) {
+        options[selected].classList.add('correct');
+    } else {
+        options[selected].classList.add('incorrect');
+        options[q.c].classList.add('correct');
+        // 間違えた問題を保存（重複なし）
+        if (!wrongQuestions.includes(q)) {
+            wrongQuestions.push(q);
         }
-      } else {
-        renderQuestion(currentIndex);
-      }
-    });
-
-    restartBtn.addEventListener("click", () => {
-      startNewQuiz();
-    });
-
-    function startNewQuiz() {
-      quizQuestions  = pick30RandomQuestions();
-      wrongQuestions = [];
-      shuffle(quizQuestions);
-      currentIndex = 0;
-      round = 1;
-      renderQuestion(currentIndex);
     }
+    
+    document.getElementById('explanation').innerHTML = `<strong>${selected === q.c ? '正解！' : '不正解...'}</strong><br>${q.ex}`;
+    document.getElementById('explanation').style.display = 'block';
+    document.getElementById('next-btn').style.display = 'block';
+}
 
-    startNewQuiz();
-  </script>
+// 次へ
+function handleNext() {
+    currentIndex++;
+    if (currentIndex < currentQuestions.length) {
+        showQuestion();
+    } else {
+        document.getElementById('progress-fill').style.width = `100%`;
+        finishRound();
+    }
+}
+
+// 終了画面
+function finishRound() {
+    const container = document.getElementById('quiz-content');
+    if (wrongQuestions.length > 0) {
+        container.innerHTML = `
+            <div class="result-screen">
+                <h2 style="color:#d32f2f">終了</h2>
+                <p>全 ${currentQuestions.length} 問中、${currentQuestions.length - wrongQuestions.length} 問正解でした。</p>
+                <p>間違えた ${wrongQuestions.length} 問をもう一度解き直しましょう。</p>
+                <button class="option" style="text-align:center; background:#ff9800; color:white; border:none;" onclick="retryWrong()">間違えた問題だけ再挑戦</button>
+            </div>`;
+    } else {
+        container.innerHTML = `
+            <div class="result-screen">
+                <h2 style="color:#388e3c">完全制覇！</h2>
+                <p>すべての問題を正解しました。統計マスターです！</p>
+                <button class="option" style="text-align:center; background:#2196f3; color:white; border:none;" onclick="location.reload()">最初（全50問）に戻る</button>
+            </div>`;
+    }
+}
+
+function retryWrong() {
+    initQuiz(wrongQuestions, true);
+}
+
+// 起動時にマスターデータ50問で開始
+initQuiz(masterData);
+</script>
 </body>
 </html>
